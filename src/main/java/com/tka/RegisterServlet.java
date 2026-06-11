@@ -1,6 +1,6 @@
+
 package com.tka;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -16,65 +15,102 @@ import java.sql.PreparedStatement;
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
-protected void doPost(HttpServletRequest request,
-                      HttpServletResponse response)
-        throws ServletException, IOException {
+    @Override
+    protected void doPost(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-    response.setContentType("text/html");
-    PrintWriter out = response.getWriter();
+        String name =
+                request.getParameter("name");
 
-    String name = request.getParameter("name");
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    String role = request.getParameter("role");
+        String email =
+                request.getParameter("email");
 
-    try {
+        String password =
+                request.getParameter("password");
 
-       
+        String role =
+                request.getParameter("role");
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        try {
 
-        Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/ems_db",
-                "root",
-                "root123"
-        );
+            Class.forName(
+                    "com.mysql.cj.jdbc.Driver");
 
-        
-        PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO users(name,email,password,role) VALUES(?,?,?,?)");
+            Connection con =
+                    DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/ems_db",
+                    "root",
+                    "root123");
 
-        ps.setString(1, name);
-        ps.setString(2, email);
-        ps.setString(3, password);
-        ps.setString(4, role);
+            // Insert into users table
 
-        int checked = ps.executeUpdate();
+            PreparedStatement userPs =
+                    con.prepareStatement(
 
-        if (checked > 0) {
+            "INSERT INTO users(name,email,password,role,mobile,department) "
+            + "VALUES(?,?,?,?,?,?)");
 
-            response.sendRedirect("index.jsp");
+            userPs.setString(1, name);
+            userPs.setString(2, email);
+            userPs.setString(3, password);
+            userPs.setString(4, role);
+            userPs.setString(5, "");
+            userPs.setString(6, "Not Assigned");
 
-        } else {
+            int userResult =
+                    userPs.executeUpdate();
 
-            RequestDispatcher rd =
-                    request.getRequestDispatcher("register.jsp");
+            // Insert employee into employees table
 
-            rd.include(request, response);
+            if("employee".equalsIgnoreCase(role)){
 
-            out.println("<h3 style='color:red'>Registration Failed!</h3>");
+                PreparedStatement empPs =
+                        con.prepareStatement(
+
+                "INSERT INTO employees(name,email,department,salary) "
+                + "VALUES(?,?,?,?)");
+
+                empPs.setString(1, name);
+                empPs.setString(2, email);
+                empPs.setString(3, "Not Assigned");
+                empPs.setDouble(4, 0);
+
+                empPs.executeUpdate();
+
+                empPs.close();
+            }
+
+            userPs.close();
+            con.close();
+
+            if(userResult > 0){
+
+                response.sendRedirect("index.jsp");
+
+            }else{
+
+                response.getWriter().println(
+                        "<h3>Registration Failed</h3>");
+            }
+
         }
 
-        ps.close();
-        con.close();
+        catch(Exception e){
 
-    } catch (Exception e) {
+            e.printStackTrace();
 
-        e.printStackTrace();
-        out.println("<h3 style='color:red'>Error : "
-                + e.getMessage() + "</h3>");
+            response.getWriter().println(
+
+            "<h3>Error : "
+
+            + e.getMessage()
+
+            + "</h3>");
+        }
+
     }
-}
-
 
 }
+

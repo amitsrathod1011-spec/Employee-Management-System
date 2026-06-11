@@ -125,7 +125,7 @@ function validateForm(){
 
 <div class="container">
 
-```
+
 <h2>👨‍💼 Employee Registration</h2>
 
 <form action="register" method="post" onsubmit="return validateForm()">
@@ -177,7 +177,7 @@ function validateForm(){
     Already have an account?
     <a href="index.jsp">Login Here</a>
 </div>
-```
+
 
 </div>
 

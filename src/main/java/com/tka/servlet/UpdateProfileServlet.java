@@ -1,3 +1,4 @@
+
 package com.tka.servlet;
 
 import java.io.IOException;
@@ -25,15 +26,14 @@ public class UpdateProfileServlet extends HttpServlet {
             HttpSession session =
                     request.getSession(false);
 
-            if(session == null) {
+            if (session == null) {
 
                 response.sendRedirect("index.jsp");
                 return;
             }
 
             int userId =
-                    (Integer)session.getAttribute(
-                    "userId");
+                    (Integer) session.getAttribute("userId");
 
             String name =
                     request.getParameter("name");
@@ -44,43 +44,35 @@ public class UpdateProfileServlet extends HttpServlet {
             String mobile =
                     request.getParameter("mobile");
 
+            String department =
+                    request.getParameter("department");
+
             UserDao dao =
                     new UserDao();
 
-            boolean result =
+            boolean status =
                     dao.updateProfile(
-                    userId,
-                    name,
-                    email,
-                    mobile);
+                            userId,
+                            name,
+                            email,
+                            mobile,
+                            department);
 
-            if(result) {
-
-                session.setAttribute(
-                        "employeeName",
-                        name);
-
-                session.setAttribute(
-                        "email",
-                        email);
+            if (status) {
 
                 response.sendRedirect(
                         "SettingsServlet?msg=profileUpdated");
 
             } else {
 
-                response.getWriter().println(
-                        "<h3>Profile Update Failed</h3>");
+                response.sendRedirect(
+                        "SettingsServlet?msg=error");
             }
 
-        } catch(Exception e) {
+        } catch (Exception e) {
 
             e.printStackTrace();
-
-            response.getWriter().println(
-                    "<h3>Error : "
-                    + e.getMessage()
-                    + "</h3>");
         }
     }
 }
+

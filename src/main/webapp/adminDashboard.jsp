@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.tka.model.Employee"%>
+
+
 <!DOCTYPE html>
 
 <html>
@@ -184,7 +188,7 @@ table td {
 
 		<ul>
 
-			<li><a href="adminDashboard.jsp">📊 Dashboard</a></li>
+			<li><a href="AdminDashboardServlet">📊 Dashboard</a></li>
 
 			<li><a href="EmployeeServlet"> 👥 Employees</a></li>
 
@@ -222,17 +226,14 @@ table td {
 				<h3>Total Employees</h3>
 				<p>${totalEmployees}</p>
 			</div>
-
 			<div class="card">
 				<h3>Departments</h3>
-				<p>${totalDepartments}</p>
+				<p>${departmentCount}</p>
 			</div>
-
 			<div class="card">
 				<h3>Present Today</h3>
-				<p>${presentEmployees}</p>
+				<p>${presentToday}</p>
 			</div>
-
 			<div class="card">
 				<h3>Pending Leaves</h3>
 				<p>${pendingLeaves}</p>
@@ -240,47 +241,96 @@ table td {
 
 		</div>
 
-		<div class="search-box">
+		
+<div class="search-box">
 
-			<input type="text" placeholder="🔍 Search Employee"> <select>
-				<option>All Departments</option>
-				<option>IT</option>
-				<option>HR</option>
-				<option>Finance</option>
-				<option>Marketing</option>
-			</select>
+<form action="AdminDashboardServlet" method="get">
 
-		</div>
+    <input
+        type="text"
+        name="keyword"
+        placeholder="🔍 Search Employee">
 
-		<div class="table-container">
+    <select name="department">
 
-			<table>
+        <option value="">All Departments</option>
 
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Department</th>
-					<th>Action</th>
-				</tr>
+        <option value="IT">IT</option>
 
-				<!-- Dynamic Employee Records -->
+        <option value="HR">HR</option>
 
-				<tr>
-					<td>John</td>
-					<td>john@gmail.com</td>
-					<td>IT</td>
+        <option value="Finance">Finance</option>
 
-					<td>
-						<button class="viewEmployees.jsp">Edit</button>
+        <option value="Marketing">Marketing</option>
 
-						<button class="action-btn delete">Delete</button>
-					</td>
+    </select>
 
-				</tr>
+    <br><br>
 
-			</table>
+    <button
+        type="submit"
+        style="
+        padding:10px 25px;
+        background:#4f46e5;
+        color:white;
+        border:none;
+        border-radius:5px;
+        cursor:pointer;">
 
-		</div>
+        Search
+
+    </button>
+
+</form>
+
+</div>
+
+
+	
+<%
+List<Employee> employeeList =
+(List<Employee>)request.getAttribute("employeeList");
+
+if(employeeList!=null){
+
+for(Employee emp : employeeList){
+%>
+
+<tr>
+
+    <td><%=emp.getName()%></td>
+
+    <td><%=emp.getEmail()%></td>
+
+    <td><%=emp.getDepartment()%></td>
+
+    <td>
+
+        <a href="EditEmployeeServlet?id=<%=emp.getId()%>">
+
+            <button class="action-btn edit">
+                Edit
+            </button>
+
+        </a>
+
+        <a href="DeleteEmployeeServlet?id=<%=emp.getId()%>">
+
+            <button class="action-btn delete">
+                Delete
+            </button>
+
+        </a>
+
+    </td>
+
+</tr>
+
+<%
+}
+}
+%>
+
 
 
 	</div>

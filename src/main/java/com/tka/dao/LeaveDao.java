@@ -1,3 +1,4 @@
+
 package com.tka.dao;
 
 import java.sql.Connection;
@@ -9,51 +10,51 @@ import com.tka.db.DBConnection;
 public class LeaveDao {
 
     // Apply Leave
-	public boolean applyLeave(
-	        int employeeId,
-	        String leaveType,
-	        String fromDate,
-	        String toDate,
-	        String reason) {
+    public boolean applyLeave(
+            int employeeId,
+            String leaveType,
+            String fromDate,
+            String toDate,
+            String reason) {
 
-	    try {
+        try {
 
-	        Connection con =
-	                DBConnection.getConnection();
+            Connection con =
+                    DBConnection.getConnection();
 
-	        String sql =
-	                "INSERT INTO leave_requests " +
-	                "(employee_id,leave_type,from_date,to_date,reason,status) " +
-	                "VALUES(?,?,?,?,?,?)";
+            String sql =
+                    "INSERT INTO leave_requests "
+                    + "(employee_id,leave_type,from_date,to_date,reason,status) "
+                    + "VALUES(?,?,?,?,?,?)";
 
-	        PreparedStatement ps =
-	                con.prepareStatement(sql);
+            PreparedStatement ps =
+                    con.prepareStatement(sql);
 
-	        ps.setInt(1, employeeId);
-	        ps.setString(2, leaveType);
-	        ps.setString(3, fromDate);
-	        ps.setString(4, toDate);
-	        ps.setString(5, reason);
-	        ps.setString(6, "Pending");
+            ps.setInt(1, employeeId);
+            ps.setString(2, leaveType);
+            ps.setString(3, fromDate);
+            ps.setString(4, toDate);
+            ps.setString(5, reason);
+            ps.setString(6, "Pending");
 
-	        int result =
-	                ps.executeUpdate();
+            int result =
+                    ps.executeUpdate();
 
-	        System.out.println(
-	                "Leave Insert Result = " + result);
+            System.out.println(
+                    "Leave Insert Result = " + result);
 
-	        return result > 0;
+            return result > 0;
 
-	    } catch(Exception e) {
+        } catch(Exception e) {
 
-	        System.out.println(
-	                "Leave Error = " + e.getMessage());
+            System.out.println(
+                    "Leave Error = " + e.getMessage());
 
-	        e.printStackTrace();
-	    }
+            e.printStackTrace();
+        }
 
-	    return false;
-	}
+        return false;
+    }
 
     // View All Leave Requests (Admin)
     public ResultSet getAllLeaves() {
@@ -66,20 +67,20 @@ public class LeaveDao {
             PreparedStatement ps =
                     con.prepareStatement(
 
-                    "SELECT l.leave_id, " +
-                    "e.id, " +
-                    "e.name, " +
-                    "e.department, " +
-                    "l.leave_type, " +
-                    "l.from_date, " +
-                    "l.to_date, " +
-                    "l.reason, " +
-                    "l.status, " +
-                    "l.applied_date " +
-                    "FROM leave_requests l " +
-                    "INNER JOIN employees e " +
-                    "ON l.employee_id = e.id " +
-                    "ORDER BY l.leave_id DESC");
+                    "SELECT l.leave_id, "
+                    + "e.id, "
+                    + "e.name, "
+                    + "e.department, "
+                    + "l.leave_type, "
+                    + "l.from_date, "
+                    + "l.to_date, "
+                    + "l.reason, "
+                    + "l.status, "
+                    + "l.applied_date "
+                    + "FROM leave_requests l "
+                    + "INNER JOIN employees e "
+                    + "ON l.employee_id = e.id "
+                    + "ORDER BY l.leave_id DESC");
 
             return ps.executeQuery();
 
@@ -103,9 +104,9 @@ public class LeaveDao {
             PreparedStatement ps =
                     con.prepareStatement(
 
-                    "SELECT * FROM leave_requests " +
-                    "WHERE employee_id=? " +
-                    "ORDER BY leave_id DESC");
+                    "SELECT * FROM leave_requests "
+                    + "WHERE employee_id=? "
+                    + "ORDER BY leave_id DESC");
 
             ps.setInt(1, employeeId);
 
@@ -131,9 +132,9 @@ public class LeaveDao {
             PreparedStatement ps =
                     con.prepareStatement(
 
-                    "UPDATE leave_requests " +
-                    "SET status='Approved' " +
-                    "WHERE leave_id=?");
+                    "UPDATE leave_requests "
+                    + "SET status='Approved' "
+                    + "WHERE leave_id=?");
 
             ps.setInt(1, leaveId);
 
@@ -162,9 +163,9 @@ public class LeaveDao {
             PreparedStatement ps =
                     con.prepareStatement(
 
-                    "UPDATE leave_requests " +
-                    "SET status='Rejected' " +
-                    "WHERE leave_id=?");
+                    "UPDATE leave_requests "
+                    + "SET status='Rejected' "
+                    + "WHERE leave_id=?");
 
             ps.setInt(1, leaveId);
 
@@ -292,8 +293,8 @@ public class LeaveDao {
 
         return 0;
     }
-    
- // Employee Total Leaves
+
+    // Employee Total Leaves
     public int getEmployeeTotalLeaves(int employeeId) {
 
         try {

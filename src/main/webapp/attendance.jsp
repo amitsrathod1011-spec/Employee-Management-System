@@ -138,11 +138,11 @@ tr:nth-child(even){
 
 <div class="header">
     <h2>Attendance Dashboard</h2>
-
-    <a href="adminDashboard.jsp"
-       class="back-btn">
-       Back To Dashboard
-    </a>
+	
+	<a href="DashboardServlet" class="btn btn-secondary">
+    Back To Dashboard
+</a>
+    
 </div>
 
 <!-- Attendance Marking Section -->

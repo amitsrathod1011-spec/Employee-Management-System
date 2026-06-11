@@ -1,3 +1,4 @@
+
 package com.tka.dao;
 
 import java.sql.Connection;
@@ -8,13 +9,14 @@ import com.tka.db.DBConnection;
 
 public class UserDao {
 
+    // ===============================
     // Get User Details By ID
+    // ===============================
     public ResultSet getUserById(int userId) {
 
         try {
 
-            Connection con =
-                    DBConnection.getConnection();
+            Connection con = DBConnection.getConnection();
 
             PreparedStatement ps =
                     con.prepareStatement(
@@ -32,12 +34,15 @@ public class UserDao {
         return null;
     }
 
-    // Update Profile
+    // ===============================
+    // Update Employee Profile
+    // ===============================
     public boolean updateProfile(
             int userId,
             String name,
             String email,
-            String mobile) {
+            String mobile,
+            String department) {
 
         try {
 
@@ -46,12 +51,19 @@ public class UserDao {
 
             PreparedStatement ps =
                     con.prepareStatement(
-                    "UPDATE users SET name=?, email=?, mobile=? WHERE id=?");
+
+                    "UPDATE users SET "
+                    + "name=?, "
+                    + "email=?, "
+                    + "mobile=?, "
+                    + "department=? "
+                    + "WHERE id=?");
 
             ps.setString(1, name);
             ps.setString(2, email);
             ps.setString(3, mobile);
-            ps.setInt(4, userId);
+            ps.setString(4, department);
+            ps.setInt(5, userId);
 
             int result =
                     ps.executeUpdate();
@@ -66,7 +78,9 @@ public class UserDao {
         return false;
     }
 
+    // ===============================
     // Verify Current Password
+    // ===============================
     public boolean verifyPassword(
             int userId,
             String currentPassword) {
@@ -78,7 +92,9 @@ public class UserDao {
 
             PreparedStatement ps =
                     con.prepareStatement(
-                    "SELECT id FROM users WHERE id=? AND password=?");
+
+                    "SELECT id FROM users "
+                    + "WHERE id=? AND password=?");
 
             ps.setInt(1, userId);
             ps.setString(2, currentPassword);
@@ -96,7 +112,9 @@ public class UserDao {
         return false;
     }
 
+    // ===============================
     // Change Password
+    // ===============================
     public boolean changePassword(
             int userId,
             String newPassword) {
@@ -108,6 +126,7 @@ public class UserDao {
 
             PreparedStatement ps =
                     con.prepareStatement(
+
                     "UPDATE users SET password=? WHERE id=?");
 
             ps.setString(1, newPassword);
@@ -125,4 +144,6 @@ public class UserDao {
 
         return false;
     }
+
 }
+

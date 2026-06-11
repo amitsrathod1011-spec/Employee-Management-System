@@ -195,13 +195,13 @@ body {
 
 				<li><a href="employeeDashboard.jsp"> 🏠 Dashboard </a></li>
 
-				<li><a href="profile.jsp"> 👤 My Profile </a></li>
+				<li><a href="ProfileServlet"> My Profile</a></li>
 
-				<li><a href="attendance.jsp"> 🕒 Attendance </a></li>
+				<li><a href="EmployeeAttendanceServlet"> 🕒 Attendance </a></li>
 
-				<li><a href="salary.jsp"> 💰 Salary </a></li>
+				<li><a href="EmployeeSalaryServlet"> 💰 Salary </a></li>
 
-				<li><a href="applyLeave.jsp"> 📝 Apply Leave </a></li>
+				<li><a href="applyLeave.jsp"> Apply Leave </a></li>
 
 				<li><a href="LeavePageServlet"> 📋 My Leave History </a></li>
 

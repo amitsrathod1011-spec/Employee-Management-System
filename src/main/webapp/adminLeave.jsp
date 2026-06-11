@@ -85,11 +85,8 @@ Leave Management
 
 </h2>
 
-<a href="adminDashboard.jsp"
-class="btn btn-secondary">
-
-Back
-
+<a href="DashboardServlet" class="btn btn-secondary">
+    Back
 </a>
 
 </div>

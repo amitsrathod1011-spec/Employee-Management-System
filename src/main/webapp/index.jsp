@@ -136,7 +136,7 @@ function validateLogin(){
 
 <div class="login-container">
 
-```
+
 <div class="logo">🔐</div>
 
 <h2>Employee Management System</h2>
@@ -176,7 +176,7 @@ function validateLogin(){
 <div class="footer">
     © Employee Management System
 </div>
-```
+
 
 </div>
 

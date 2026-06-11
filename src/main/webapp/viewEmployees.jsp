@@ -158,11 +158,9 @@ body{
 
         <div class="top-actions">
 
-            <a href="adminDashboard.jsp"
-               class="btn btn-primary back-btn">
-               <i class="fas fa-arrow-left"></i>
-               Back to Dashboard
-            </a>
+            <a href="DashboardServlet" class="btn btn-secondary">
+    Back To Dashboard
+</a>
 
             <div class="count-box">
                 Total Employees :

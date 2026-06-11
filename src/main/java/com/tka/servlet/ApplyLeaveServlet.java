@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.tka.dao.LeaveDao;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +17,21 @@ public class ApplyLeaveServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    // Open Apply Leave Page
+    @Override
+    protected void doGet(
+            HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        RequestDispatcher rd =
+                request.getRequestDispatcher(
+                "applyLeave.jsp");
+
+        rd.forward(request, response);
+    }
+
+    // Save Leave
     @Override
     protected void doPost(
             HttpServletRequest request,
@@ -24,51 +40,41 @@ public class ApplyLeaveServlet extends HttpServlet {
 
         try {
 
-            // Get Session
             HttpSession session =
                     request.getSession(false);
 
-            if(session == null) {
+            if(session == null){
 
-                response.getWriter().println(
-                        "<h3>Session Expired. Please Login Again.</h3>");
+                response.sendRedirect("index.jsp");
                 return;
             }
 
-            // Get Employee ID from Session
             Integer employeeId =
-                    (Integer) session.getAttribute(
+                    (Integer)session.getAttribute(
                     "employeeId");
 
-            if(employeeId == null) {
+            if(employeeId == null){
 
-                response.getWriter().println(
-                        "<h3>Employee ID Not Found In Session.</h3>");
+                response.sendRedirect("index.jsp");
                 return;
             }
 
-            // Get Form Data
             String leaveType =
-                    request.getParameter("leaveType");
+                    request.getParameter(
+                    "leaveType");
 
             String fromDate =
-                    request.getParameter("fromDate");
+                    request.getParameter(
+                    "fromDate");
 
             String toDate =
-                    request.getParameter("toDate");
+                    request.getParameter(
+                    "toDate");
 
             String reason =
-                    request.getParameter("reason");
+                    request.getParameter(
+                    "reason");
 
-            // Debug Console
-            System.out.println("===== APPLY LEAVE =====");
-            System.out.println("Employee ID : " + employeeId);
-            System.out.println("Leave Type : " + leaveType);
-            System.out.println("From Date : " + fromDate);
-            System.out.println("To Date : " + toDate);
-            System.out.println("Reason : " + reason);
-
-            // Save Leave Request
             LeaveDao dao =
                     new LeaveDao();
 
@@ -80,27 +86,37 @@ public class ApplyLeaveServlet extends HttpServlet {
                     toDate,
                     reason);
 
-            System.out.println(
-                    "Apply Leave Result : " + result);
+            if(result){
 
-            if(result) {
+            	HttpSession session1 = request.getSession();
 
-                response.sendRedirect(
-                        "LeavePageServlet");
+            	session1.setAttribute(
+            	        "successMessage",
+            	        "Leave Applied Successfully!");
 
-            } else {
+            	response.sendRedirect("applyLeave.jsp");
 
-                response.getWriter().println(
-                        "<h3>Failed To Apply Leave</h3>");
+            }else{
+
+            	HttpSession session1 = request.getSession();
+
+            	session1.setAttribute(
+            	        "errorMessage",
+            	        "Failed To Apply Leave!");
+
+            	response.sendRedirect("applyLeave.jsp");
             }
 
-        } catch(Exception e) {
+        }
+
+        catch(Exception e){
 
             e.printStackTrace();
 
             response.getWriter().println(
-                    "<h3>Error :</h3><br>"
-                    + e.getMessage());
+            "Error : " + e.getMessage());
         }
+
     }
+
 }

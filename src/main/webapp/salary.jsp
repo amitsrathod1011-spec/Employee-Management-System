@@ -308,11 +308,8 @@ Net Salary Preview
 
 </button>
 
-<a href="adminDashboard.jsp"
-   class="btn btn-secondary ms-2">
-
-Back
-
+<a href="DashboardServlet" class="btn btn-secondary">
+    Back To Dashboard
 </a>
 
 </form>

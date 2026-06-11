@@ -1,3 +1,4 @@
+
 package com.tka;
 
 import jakarta.servlet.*;
@@ -6,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 
 import java.io.*;
 import java.sql.*;
+
+import com.tka.dao.EmployeeDao;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -16,12 +19,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String email =
-                request.getParameter(
-                "email");
+                request.getParameter("email");
 
         String password =
-                request.getParameter(
-                "password");
+                request.getParameter("password");
 
         try {
 
@@ -37,9 +38,8 @@ public class LoginServlet extends HttpServlet {
             PreparedStatement ps =
                     con.prepareStatement(
 
-                    "SELECT * FROM users " +
-                    "WHERE email=? " +
-                    "AND password=?");
+            "SELECT * FROM users " +
+            "WHERE email=? AND password=?");
 
             ps.setString(1, email);
             ps.setString(2, password);
@@ -52,57 +52,93 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session =
                         request.getSession();
 
-                session.setAttribute(
-                        "userId",
-                        rs.getInt("id"));
+                // User ID from users table
+                int userId =
+                        rs.getInt("id");
 
-                session.setAttribute(
-                        "employeeId",
-                        rs.getInt("id"));
+                // User Email
+                String userEmail =
+                        rs.getString("email");
 
-                session.setAttribute(
-                        "employeeName",
-                        rs.getString("name"));
+                // User Name
+                String userName =
+                        rs.getString("name");
 
-                session.setAttribute(
-                        "email",
-                        rs.getString("email"));
-
-                session.setAttribute(
-                        "role",
-                        rs.getString("role"));
-
+                // User Role
                 String role =
                         rs.getString("role");
 
+                // Get Employee ID from employees table
+                EmployeeDao employeeDao =
+                        new EmployeeDao();
+
+                int employeeId =
+                        employeeDao.getEmployeeIdByEmail(
+                                userEmail);
+
+                // Store Session Values
+
+                session.setAttribute(
+                        "userId",
+                        userId);
+
+                session.setAttribute(
+                        "employeeId",
+                        employeeId);
+
+                session.setAttribute(
+                        "employeeName",
+                        userName);
+
+                session.setAttribute(
+                        "email",
+                        userEmail);
+
+                session.setAttribute(
+                        "role",
+                        role);
+
+                System.out.println(
+                        "User ID : " + userId);
+
+                System.out.println(
+                        "Employee ID : " + employeeId);
+
                 if("admin".equalsIgnoreCase(role)) {
 
-                    response.sendRedirect(
-                            "adminDashboard.jsp");
+                	response.sendRedirect("AdminDashboardServlet");
 
-                } else {
+                }
+
+                else {
 
                     response.sendRedirect(
                             "employeeDashboard.jsp");
                 }
 
-            } else {
+            }
+
+            else {
 
                 response.getWriter().println(
-                        "<h3>Invalid Login</h3>");
+
+                "<h3>Invalid Email or Password</h3>");
             }
 
             rs.close();
             ps.close();
             con.close();
 
-        } catch(Exception e) {
+        }
+
+        catch(Exception e) {
 
             e.printStackTrace();
 
             response.getWriter().println(
-                    "Error : " +
-                    e.getMessage());
+
+            "Error : " + e.getMessage());
         }
     }
+
 }

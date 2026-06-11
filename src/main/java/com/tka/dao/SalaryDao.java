@@ -338,4 +338,118 @@ public class SalaryDao {
 
         return totalNetSalary;
     }
+    
+    
+ // ===============================
+ // Employee Salary Record
+ // ===============================
+
+ public ResultSet getEmployeeSalary(int employeeId) {
+
+     try {
+
+         Connection con =
+                 DBConnection.getConnection();
+
+         PreparedStatement ps =
+                 con.prepareStatement(
+
+         "SELECT * FROM salary " +
+         "WHERE employee_id=? " +
+         "ORDER BY salary_id DESC LIMIT 1");
+
+         ps.setInt(1, employeeId);
+
+         return ps.executeQuery();
+
+     }
+
+     catch(Exception e) {
+
+         e.printStackTrace();
+     }
+
+     return null;
+ }
+
+
+ // ===============================
+ // Per Day Salary
+ // ===============================
+
+ public double getPerDaySalary(int employeeId) {
+
+     double perDay = 0;
+
+     try {
+
+         ResultSet rs =
+                 getEmployeeSalary(employeeId);
+
+         if(rs.next()) {
+
+             double basicSalary =
+                     rs.getDouble("basic_salary");
+
+             perDay =
+                     basicSalary / 30.0;
+         }
+
+     }
+
+     catch(Exception e) {
+
+         e.printStackTrace();
+     }
+
+     return perDay;
+ }
+
+
+ // ===============================
+ // Attendance Based Salary
+ // ===============================
+
+ public double getEarnedSalary(
+         int employeeId,
+         int presentDays) {
+
+     double earnedSalary = 0;
+
+     try {
+
+         ResultSet rs =
+                 getEmployeeSalary(employeeId);
+
+         if(rs.next()) {
+
+             double basicSalary =
+                     rs.getDouble("basic_salary");
+
+             double bonus =
+                     rs.getDouble("bonus");
+
+             double deduction =
+                     rs.getDouble("deduction");
+
+             double perDay =
+                     basicSalary / 30.0;
+
+             earnedSalary =
+                     (perDay * presentDays)
+                     + bonus
+                     - deduction;
+         }
+
+     }
+
+     catch(Exception e) {
+
+         e.printStackTrace();
+     }
+
+     return earnedSalary;
+ }
+ 
+    
 }

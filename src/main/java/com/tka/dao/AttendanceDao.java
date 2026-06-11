@@ -125,4 +125,194 @@ public class AttendanceDao {
 
         return null;
     }
+ // Employee Attendance History
+    public ResultSet getAttendanceByEmployeeId(int employeeId) {
+
+        try {
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            PreparedStatement ps =
+                    con.prepareStatement(
+
+            "SELECT attendance_date,status " +
+            "FROM attendance " +
+            "WHERE employee_id=? " +
+            "ORDER BY attendance_date DESC");
+
+            ps.setInt(1, employeeId);
+
+            return ps.executeQuery();
+
+        }
+
+        catch(Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    // Present Count
+
+    public int getPresentCount(int employeeId) {
+
+        try {
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            PreparedStatement ps =
+                    con.prepareStatement(
+
+            "SELECT COUNT(*) FROM attendance " +
+            "WHERE employee_id=? " +
+            "AND status='Present'");
+
+            ps.setInt(1, employeeId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()) {
+
+                return rs.getInt(1);
+            }
+
+        }
+
+        catch(Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    // Absent Count
+
+    public int getAbsentCount(int employeeId) {
+
+        try {
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            PreparedStatement ps =
+                    con.prepareStatement(
+
+            "SELECT COUNT(*) FROM attendance " +
+            "WHERE employee_id=? " +
+            "AND status='Absent'");
+
+            ps.setInt(1, employeeId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()) {
+
+                return rs.getInt(1);
+            }
+
+        }
+
+        catch(Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    // Total Attendance Count
+
+    public int getTotalAttendance(int employeeId) {
+
+        try {
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            PreparedStatement ps =
+                    con.prepareStatement(
+
+            "SELECT COUNT(*) FROM attendance " +
+            "WHERE employee_id=?");
+
+            ps.setInt(1, employeeId);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()) {
+
+                return rs.getInt(1);
+            }
+
+        }
+
+        catch(Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    // Attendance Percentage
+
+    public double getAttendancePercentage(int employeeId) {
+
+        int present =
+                getPresentCount(employeeId);
+
+        int total =
+                getTotalAttendance(employeeId);
+
+        if(total==0){
+
+            return 0;
+        }
+
+        return ((double)present/total)*100;
+    }
+    public int getPresentToday() {
+
+        int count = 0;
+
+        try {
+
+            Connection con =
+                    DBConnection.getConnection();
+
+            PreparedStatement ps =
+                    con.prepareStatement(
+
+            "SELECT COUNT(*) FROM attendance "
+            + "WHERE attendance_date=CURDATE() "
+            + "AND status='Present'");
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            if(rs.next()) {
+
+                count = rs.getInt(1);
+            }
+
+        } catch(Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return count;
+    }
 }
+

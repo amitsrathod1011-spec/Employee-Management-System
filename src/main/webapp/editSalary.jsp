@@ -220,11 +220,8 @@ Salary Month
 
 </button>
 
-<a href="SalaryPageServlet"
-   class="btn btn-secondary">
-
-Back
-
+<a href="DashboardServlet" class="btn btn-secondary">
+    Back To Dashboard
 </a>
 
 </form>

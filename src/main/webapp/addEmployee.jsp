@@ -239,9 +239,9 @@ body{
 
         </form>
 
-        <a href="adminDashboard.jsp" class="back-btn">
-            ← Back to Dashboard
-        </a>
+        <a href="DashboardServlet" class="btn btn-secondary">
+    Back to Dashboard
+</a>
 
         <div class="footer">
             Employee Management System

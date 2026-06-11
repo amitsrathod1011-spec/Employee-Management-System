@@ -314,7 +314,9 @@ Rejected
 </div>
 
 </div>
-
+<a href="DashboardServlet" class="btn btn-secondary">
+    Back To Dashboard
+</a>
 </div>
 
 <script>

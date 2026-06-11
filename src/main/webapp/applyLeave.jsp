@@ -103,6 +103,52 @@ Apply Leave
 
 </h2>
 
+<%
+String success =
+(String)session.getAttribute("successMessage");
+
+if(success != null){
+%>
+
+<div class="alert alert-success alert-dismissible fade show">
+
+    <strong>Success!</strong>
+    <%=success%>
+
+    <button type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"></button>
+
+</div>
+
+<%
+session.removeAttribute("successMessage");
+}
+%>
+
+<%
+String error =
+(String)session.getAttribute("errorMessage");
+
+if(error != null){
+%>
+
+<div class="alert alert-danger alert-dismissible fade show">
+
+    <strong>Error!</strong>
+    <%=error%>
+
+    <button type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"></button>
+
+</div>
+
+<%
+session.removeAttribute("errorMessage");
+}
+%>
+
 <div class="card">
 
 <div class="card-header">
@@ -238,11 +284,8 @@ Apply Leave
 
 </button>
 
-<a href="employeeDashboard.jsp"
-   class="btn btn-secondary">
-
-Back
-
+<a href="DashboardServlet" class="btn btn-secondary">
+    Back
 </a>
 
 </form>
